@@ -30,7 +30,7 @@ contract Presentation {
         DataCap = IDataCap(_dataCap);
     }
 
-    function updateRanking(uint16 grade) public {
+    function updateRanking(uint256 grade) public {
         return;
     }
 }
