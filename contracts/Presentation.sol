@@ -30,7 +30,21 @@ contract Presentation {
         DataCap = IDataCap(_dataCap);
     }
 
-    function updateRanking(uint256 grade) public {
-        return;
+    function updateRanking(uint16 grade) public {
+        if (votes[msg.sender] == grade) {
+            return;
+        }
+
+        require(grade >= 1, "grade too low");
+        require(grade <= 10, "grade too high");
+
+        if (votes[msg.sender] == 0) {
+            ranking = (ranking * length + grade * 100) / (length + 1);
+            length++;
+        } else {
+            ranking -= votes[msg.sender] * 100;
+            ranking = (ranking * length + grade * 100) / length;
+        }
+        votes[msg.sender] = grade;
     }
 }
