@@ -1,5 +1,7 @@
 pragma solidity ^0.8.0;
 
+import "@zondax/filecoin-solidity/contracts/v0.8/types/DataCapTypes.sol";
+
 interface IDataCap {
     function name() external returns (string memory);
 

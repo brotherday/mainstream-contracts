@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.0;
-
-import "@zondax/filecoin-solidity/contracts/v0.8/types/DataCapTypes.sol";
 import {IDataCap} from "./interface/IDataCap.sol";
 
 contract Presentation {
