@@ -1,0 +1,51 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "forge:build",
+      "type": "shell",
+      "command": "forge",
+      "args": ["build", "--hardhat"],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "forge:test",
+      "type": "shell",
+      "command": "forge",
+      "args": ["test", "--fork-url", "https://filecoin-hyperspace.chainstacklabs.com/rpc/v0"],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "forge:update",
+      "type": "shell",
+      "command": "forge",
+      "args": ["update"],
+      "problemMatcher": []
+    },
+    {
+      "label": "forge:remappings",
+      "type": "shell",
+      "command": "forge remappings",
+      "args": ["remappings"],
+      "problemMatcher": []
+    },
+    {
+      "label": "forge:install",
+      "type": "shell",
+      "command": "forge",
+      "args": ["install", "${input:package}"],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "package",
+      "type": "promptString",
+      "description": "Solidity git hub repo to include"
+    }
+  ]
+}
