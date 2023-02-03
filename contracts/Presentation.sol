@@ -9,7 +9,7 @@ contract Presentation {
     address public owner;
     bytes public topic;
     string public description;
-    uint16 public ranking;
+    uint256 public ranking;
     uint256 public length;
 
     mapping(address => uint16) public votes;
@@ -19,7 +19,7 @@ contract Presentation {
         address _owner,
         bytes memory _topic,
         string memory _description,
-        uint16 _ranking,
+        uint256 _ranking,
         address _dataCap
     ) {
         pieceCid = _pieceCid;
