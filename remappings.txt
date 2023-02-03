@@ -1,0 +1,3 @@
+solidity-cborutils/=lib/solidity-cborutils/
+@ensdomains/=lib/
+@zondax/=lib/

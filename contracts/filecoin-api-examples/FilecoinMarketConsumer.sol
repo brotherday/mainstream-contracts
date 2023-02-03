@@ -1,6 +1,7 @@
+// SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.0;
 
-import {MarketAPI} from "@zondax/filecoin-solidity/contracts/v0.8/MarketAPI.sol";
+import {MarketAPIOld as MarketAPI} from "@zondax/filecoin-solidity/contracts/v0.8/MarketAPI.sol";
 import {MarketTypes} from "@zondax/filecoin-solidity/contracts/v0.8/types/MarketTypes.sol";
 
 contract FilecoinMarketConsumer {
@@ -29,42 +30,42 @@ contract FilecoinMarketConsumer {
     } 
 
     function storeDealLabel(uint64 dealId) public  {
-        dealLabel = MarketAPI.getDealLabel(dealId).label;
+        dealLabel = MarketAPI.getDealLabel(MarketTypes.GetDealLabelParams(dealId)).label;
     }
 
     function storeDealClient(uint64 dealId) public {
-        dealClientActorId = MarketAPI.getDealClient(dealId).client;
+        dealClientActorId = MarketAPI.getDealClient(MarketTypes.GetDealClientParams(dealId)).client;
     }
 
     function storeDealClientProvider(uint64 dealId) public {
-        dealProviderActorId = MarketAPI.getDealProvider(dealId).provider;
+        dealProviderActorId = MarketAPI.getDealProvider(MarketTypes.GetDealProviderParams(dealId)).provider;
     }
 
     function storeDealCommitment(uint64 dealId) public {
-        dealCommitment = MarketAPI.getDealDataCommitment(dealId);
+        dealCommitment = MarketAPI.getDealDataCommitment(MarketTypes.GetDealDataCommitmentParams(dealId));
     }
 
     function storeDealTerm(uint64 dealId) public {
-        dealTerm = MarketAPI.getDealTerm(dealId);
+        dealTerm = MarketAPI.getDealTerm(MarketTypes.GetDealTermParams(dealId));
     }
 
     function storeDealTotalPrice(uint64 dealId) public {
-       dealPricePerEpoch = MarketAPI.getDealTotalPrice(dealId);
+       dealPricePerEpoch = MarketAPI.getDealTotalPrice(MarketTypes.GetDealEpochPriceParams(dealId));
     }
 
     function storeClientCollateral(uint64 dealId) public {
-        clientCollateral = MarketAPI.getDealClientCollateral(dealId);
+        clientCollateral = MarketAPI.getDealClientCollateral(MarketTypes.GetDealClientCollateralParams(dealId));
     }
     
     function storeProviderCollateral(uint64 dealId) public {
-        providerCollateral = MarketAPI.getDealProviderCollateral(dealId);
+        providerCollateral = MarketAPI.getDealProviderCollateral(MarketTypes.GetDealProviderCollateralParams(dealId));
     }
 
     function storeDealVerificaton(uint64 dealId) public {
-        isDealActivated = MarketAPI.getDealVerified(dealId).verified;
+        isDealActivated = MarketAPI.getDealVerified(MarketTypes.GetDealVerifiedParams(dealId)).verified;
     }
 
     function storeDealActivationStatus(uint64 dealId) public {
-        activationStatus = MarketAPI.getDealActivation(dealId);
+        activationStatus = MarketAPI.getDealActivation(MarketTypes.GetDealActivationParams(dealId));
     }
 }

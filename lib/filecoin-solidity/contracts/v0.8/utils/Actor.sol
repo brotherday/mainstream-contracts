@@ -27,7 +27,7 @@ library HyperActor {
     address constant CALL_ACTOR_ID = 0xfe00000000000000000000000000000000000005;
     uint64 constant DEFAULT_FLAG = 0x00000000;
 
-    function convert (uint256 _a) internal returns (uint64) 
+    function convert (uint256 _a) pure internal returns (uint64) 
     {
         return uint64(_a);
     }
@@ -65,7 +65,7 @@ library Actor {
     uint64 constant DEFAULT_FLAG = 0x00000000;
 
     function call(uint method_num, bytes memory actor_code, bytes memory raw_request, uint64 codec) internal returns (bytes memory) {
-        call_inner(method_num, actor_code, raw_request, codec, msg.value);
+        return call_inner(method_num, actor_code, raw_request, codec, msg.value);
     }
 
     function call_inner(uint method_num, bytes memory actor_code, bytes memory raw_request, uint64 codec, uint amount) internal returns (bytes memory) {

@@ -1,11 +1,11 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.13;
 
-import { MarketAPI } from "../lib/filecoin-solidity/contracts/v0.8/MarketAPI.sol";
-import { CommonTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol";
-import { MarketTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/MarketTypes.sol";
-import { Actor, HyperActor } from "../lib/filecoin-solidity/contracts/v0.8/utils/Actor.sol";
-import { Misc } from "../lib/filecoin-solidity/contracts/v0.8/utils/Misc.sol";
+import { MarketAPI } from "@zondax/filecoin-solidity/contracts/v0.8/MarketAPI.sol";
+import { CommonTypes } from "@zondax/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol";
+import { MarketTypes } from "@zondax/filecoin-solidity/contracts/v0.8/types/MarketTypes.sol";
+import { Actor, HyperActor } from "@zondax/filecoin-solidity/contracts/v0.8/utils/Actor.sol";
+import { Misc } from "@zondax/filecoin-solidity/contracts/v0.8/utils/Misc.sol";
 
 /* 
 Contract Usage
