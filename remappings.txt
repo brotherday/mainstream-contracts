@@ -1,3 +1,4 @@
 solidity-cborutils/=lib/solidity-cborutils/
 @ensdomains/=lib/
 @zondax/=lib/
+@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
