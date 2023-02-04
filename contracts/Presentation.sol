@@ -24,7 +24,7 @@ contract Presentation is DataCap {
         ranking = _ranking;
     }
 
-    function updateCID(bytes calldata _pieceCID) public {
+    function updateCID(bytes calldata _pieceCID) external {
         pieceCid = _pieceCID;
     }
 
