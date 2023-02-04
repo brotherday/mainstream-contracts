@@ -25,6 +25,8 @@ contract Library {
         string memory metadata
     ) public returns (address) {
         Presentation p = new Presentation();
+        p.initialize(metadata, 0);
+
         uint256 currentEpoch = block.timestamp;
 
         update(address(p), _pieceCid, dealId, size);

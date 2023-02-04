@@ -13,12 +13,7 @@ contract Presentation is File {
 
     mapping(address => uint16) public votes;
 
-    function initialize(
-        bytes memory _pieceCid,
-        string memory _metadata,
-        uint256 _ranking
-    ) public initializer {
-        pieceCid = _pieceCid;
+    function initialize(string memory _metadata, uint256 _ranking) public initializer {
         metadata = _metadata;
         ranking = _ranking;
     }

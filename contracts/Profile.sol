@@ -14,6 +14,7 @@ contract Profile {
     mapping(address => bytes32) public roles;
 
     constructor(bytes32 _role) {
+        require(_role == Host || _role == Public || _role == Speaker, "Invalid role type");
         owner = msg.sender;
         roles[msg.sender] = _role;
     }
