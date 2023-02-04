@@ -19,22 +19,15 @@ contract Library {
     }
 
     function add(
-        bytes memory pieceCid,
+        bytes calldata _pieceCid,
         uint64 dealId,
         uint64 size,
         string memory metadata
     ) public returns (address) {
-        Presentation p = new Presentation(pieceCid, owner, metadata, 0);
+        Presentation p = new Presentation(_pieceCid, msg.sender, metadata, 0);
         uint256 currentEpoch = block.timestamp;
 
-        FilecoinMarketConsumer consumer = new FilecoinMarketConsumer();
-
-        DealRewarder reward = new DealRewarder();
-
-        consumer.storeAll(dealId);
-        reward.addCID(pieceCid, size);
-
-        reward.claim_bounty(dealId);
+        update(address(p), _pieceCid, dealId, size);
 
         presentationsByAccount[msg.sender][currentEpoch] = address(p);
         epochs.push(currentEpoch);
@@ -54,11 +47,21 @@ contract Library {
     function update(
         address _presentation,
         bytes calldata _pieceCID,
-        uint64 dealId
+        uint64 dealId,
+        uint64 size
     ) public {
         Presentation p = Presentation(_presentation);
 
-        p.updateCID(_pieceCID, dealId);
+        FilecoinMarketConsumer consumer = new FilecoinMarketConsumer();
+
+        DealRewarder reward = new DealRewarder();
+
+        consumer.storeAll(dealId);
+        reward.addCID(_pieceCID, size);
+
+        reward.claim_bounty(dealId);
+
+        p.updateCID(_pieceCID);
     }
 
     function remove(uint256 _epoch, uint256 _num) public {
