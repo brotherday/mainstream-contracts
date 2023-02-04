@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity ^0.8.0;
-import {IDataCap} from "./interface/IDataCap.sol";
+import {DataCap} from "./DataCap/DataCap.sol";
 
-contract Presentation {
-    IDataCap DataCap;
-
+contract Presentation is DataCap {
     bytes public pieceCid;
     address public owner;
     bytes public topic;
-    string public description;
+    string public metadata;
     uint256 public ranking;
     uint256 public length;
 
@@ -17,17 +15,17 @@ contract Presentation {
     constructor(
         bytes memory _pieceCid,
         address _owner,
-        bytes memory _topic,
-        string memory _description,
-        uint256 _ranking,
-        address _dataCap
+        string memory _metadata,
+        uint256 _ranking
     ) {
         pieceCid = _pieceCid;
         owner = _owner;
-        topic = _topic;
-        description = _description;
+        metadata = _metadata;
         ranking = _ranking;
-        DataCap = IDataCap(_dataCap);
+    }
+
+    function tokenURI(string memory _tokenURI) public {
+        metadata = _tokenURI;
     }
 
     function updateRanking(uint16 grade) public {
