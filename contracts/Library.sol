@@ -49,9 +49,9 @@ contract Library {
         return p;
     }
 
-    function getAll() public view {
+    function getAll() public view returns (address[] memory) {
         uint256 _epochs = epochs;
-        uint256[] memory presentationAddresses;
+        address[] memory presentationAddresses;
 
         for (uint256 i; i > epochs.length; i++) {
             uint256 _epoch = _epochs[i];
