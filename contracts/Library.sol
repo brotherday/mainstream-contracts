@@ -7,9 +7,11 @@ import {FilecoinMarketConsumer} from "./filecoin-api-examples/FilecoinMarketCons
 
 contract Library {
     address public owner;
-    address[] public presentation;
+    uint256[] public epoch;
+
     mapping(address => mapping(uint256 => address)) public presentationsByAccount;
-    uint256[] epoch;
+    mapping(uint256 => address) public presentations;
+    mapping(uint256 => uint256) public numPresentationsByEpoch;
 
     constructor(address _owner) {
         owner = _owner;
@@ -36,11 +38,15 @@ contract Library {
         presentationsByAccount[msg.sender][currentEpoch] = address(p);
         epoch.push(currentEpoch);
 
+        presentations[currentEpoch][numPresentationsByEpoch] = address(p);
+        numPresentationsByEpoch[block.timestamp]++;
+
         return address(p);
     }
 
-    function get(address _presentation) public {
-        return;
+    function get(address _presentation) public returns (Presentation) {
+        Presentation p = Presentation(_presentation);
+        return p;
     }
 
     function getAll() public view {
@@ -58,12 +64,12 @@ contract Library {
     }
 
     function update(address _presentation, bytes calldata _pieceCID) public {
-        Presentation updateP = Presentation(_presentation);
+        Presentation p = Presentation(_presentation);
 
-        updateP.pieceCid = _pieceCID;
+        p.pieceCid = _pieceCID;
     }
 
-    function remove(address _presentation) public {
-        return;
+    function remove(address _presentation, uint256 _epoch) public {
+        delete presentationsByAccount[msg.sender][_epoch];
     }
 }
