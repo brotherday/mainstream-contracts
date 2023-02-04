@@ -51,10 +51,14 @@ contract Library {
         }
     }
 
-    function update(address _presentation, bytes calldata _pieceCID) public {
+    function update(
+        address _presentation,
+        bytes calldata _pieceCID,
+        uint64 dealId
+    ) public {
         Presentation p = Presentation(_presentation);
 
-        p.updateCID(_pieceCID);
+        p.updateCID(_pieceCID, dealId);
     }
 
     function remove(uint256 _epoch, uint256 _num) public {
@@ -62,12 +66,27 @@ contract Library {
         delete presentations[_epoch][_num];
     }
 
-    function get(address _presentation) public returns (Presentation) {
+    function get(address _presentation) public view returns (Presentation) {
         Presentation p = Presentation(_presentation);
         return p;
     }
 
     function getAll() public view returns (address[] memory) {
+        uint256[] memory _epochs = epochs;
+
+        address _presentation;
+        address[] storage _presentations;
+
+        for (uint256 i; i <= _epochs.length; i++) {
+            uint256 _epoch = _epochs[i];
+            _presentation = presentations[_epoch][numPresentationsByEpoch[_epoch]];
+            _presentations.push(_presentation);
+        }
+
+        return _presentations;
+    }
+
+    function getAllByAccount() public view returns (address[] memory) {
         uint256[] memory _epochs = epochs;
         address[] storage presentationAddresses;
 
@@ -97,14 +116,6 @@ contract Library {
 
         return _presentations;
     }
-
-    // function getAllByAccount(address _owner) public view returns(address[] memory) {
-    //     uint256[] memory _epochs = epochs;
-    //     address
-    //     for(uint256 i; i < _epochs.length; i++) {
-
-    //     }
-    // }
 
     function getEpochs() public view returns (uint256[] memory) {
         return epochs;
