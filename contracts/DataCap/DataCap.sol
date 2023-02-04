@@ -31,25 +31,6 @@ contract DataCap is IDataCap, ERC165 {
     function balance(bytes calldata addr) external returns (BigInt memory) {
         DataCapAPI.balance(addr);
     }
-
-    //!FIXME: mint not implemented
-    function mint(MintParams memory params) internal returns (MintReturn memory) {
-        bytes memory raw_request = params.serializeMintParams();
-
-        bytes memory raw_response = Actor.call(
-            DataCapTypes.MintMethodNum,
-            DataCapTypes.ActorID,
-            raw_request,
-            Misc.CBOR_CODEC,
-            msg.value,
-            false
-        );
-
-        bytes memory result = Actor.readRespData(raw_response);
-
-        return result.deserializeMintReturn();
-    }
-
     function allowance(DataCapTypes.GetAllowanceParams calldata params)
         external
         returns (BigInt memory)
