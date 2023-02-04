@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: APGL-3.0
 pragma solidity ^0.8.0;
-import {DataCap} from "./DataCap/DataCap.sol";
+import {File} from "./File/File.sol";
 
-contract Presentation is DataCap {
+contract Presentation is File {
     bytes private pieceCid;
-    address private owner;
     string private metadata;
     uint256 private ranking;
     uint256 private length;
@@ -14,14 +13,12 @@ contract Presentation is DataCap {
 
     mapping(address => uint16) public votes;
 
-    constructor(
+    function initialize(
         bytes memory _pieceCid,
-        address _owner,
         string memory _metadata,
         uint256 _ranking
-    ) {
+    ) public initializer {
         pieceCid = _pieceCid;
-        owner = _owner;
         metadata = _metadata;
         ranking = _ranking;
     }
@@ -48,11 +45,11 @@ contract Presentation is DataCap {
         votes[msg.sender] = grade;
     }
 
-    function getVote(address _voter) public returns (uint16) {
+    function getVote(address _voter) public view returns (uint16) {
         return votes[_voter];
     }
 
-    function tokenURI() public returns (string memory) {
+    function tokenURI() public view returns (string memory) {
         return metadata;
     }
 }
