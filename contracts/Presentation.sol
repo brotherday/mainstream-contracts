@@ -3,14 +3,14 @@ pragma solidity ^0.8.0;
 import {DataCap} from "./DataCap/DataCap.sol";
 
 contract Presentation is DataCap {
-    bytes public pieceCid;
-    address public owner;
-    string public metadata;
-    uint256 public ranking;
-    uint256 public length;
+    bytes private pieceCid;
+    address private owner;
+    string private metadata;
+    uint256 private ranking;
+    uint256 private length;
 
-    uint256 constant VOTE_MIN = 1;
-    uint256 constant VOTE_MAX = 10;
+    uint256 public constant VOTE_MIN = 1;
+    uint256 public constant VOTE_MAX = 10;
 
     mapping(address => uint16) public votes;
 
