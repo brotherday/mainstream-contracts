@@ -24,8 +24,8 @@ contract Presentation is DataCap {
         ranking = _ranking;
     }
 
-    function tokenURI(string memory _tokenURI) public {
-        metadata = _tokenURI;
+    function updateCID(bytes calldata _pieceCID) public {
+        pieceCid = _pieceCID;
     }
 
     function updateRanking(uint16 grade) public {
@@ -44,5 +44,13 @@ contract Presentation is DataCap {
             ranking = (ranking * length + grade * 100) / length;
         }
         votes[msg.sender] = grade;
+    }
+
+    function getVote(address _voter) public returns (uint16) {
+        return votes[_voter];
+    }
+
+    function tokenURI() public returns (string memory) {
+        return metadata;
     }
 }
