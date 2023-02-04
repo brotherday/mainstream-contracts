@@ -32,7 +32,7 @@ contract DataCap is IDataCap, ERC165 {
         DataCapAPI.balance(addr);
     }
 
-    // TODO: Fix mint
+    //!FIXME: mint not implemented
     function mint(MintParams memory params) internal returns (MintReturn memory) {
         bytes memory raw_request = params.serializeMintParams();
 
