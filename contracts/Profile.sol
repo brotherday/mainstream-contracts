@@ -4,9 +4,9 @@ pragma solidity ^0.8.0;
 contract Profile {
     address public owner;
 
-    bytes32 public constant HOST = keccak256("HOST");
-    bytes32 public constant PUBLIC = keccak256("PUBLIC");
-    bytes32 public constant SPEAKER = keccak256("SPEAKER");
+    bytes32 public constant Host = keccak256("Host");
+    bytes32 public constant Public = keccak256("Public");
+    bytes32 public constant Speaker = keccak256("Speaker");
 
     mapping(address => string) public names;
     mapping(address => bytes32) public emails;
