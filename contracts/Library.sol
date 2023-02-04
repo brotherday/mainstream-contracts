@@ -10,8 +10,9 @@ contract Library {
     uint256[] public epochs;
 
     mapping(address => mapping(uint256 => address)) public presentationsByAccount;
-    mapping(uint256 => address) public presentations;
+    mapping(uint256 => mapping(uint256 => address)) public presentations;
     mapping(uint256 => uint256) public numPresentationsByEpoch;
+    mapping(address => address[]) public contributors;
 
     constructor(address _owner) {
         owner = _owner;
@@ -38,10 +39,26 @@ contract Library {
         presentationsByAccount[msg.sender][currentEpoch] = address(p);
         epochs.push(currentEpoch);
 
-        presentations[currentEpoch][numPresentationsByEpoch] = address(p);
-        numPresentationsByEpoch[block.timestamp]++;
+        presentations[currentEpoch][numPresentationsByEpoch[currentEpoch]] = address(p);
+        numPresentationsByEpoch[currentEpoch]++;
 
         return address(p);
+    }
+
+    function setContributors(address _presentation, address[] calldata _contributors) public {
+        for (uint256 i; i < _contributors.length; i++) {
+            contributors[_presentation].push(_contributors[i]);
+        }
+    }
+
+    function update(address _presentation, bytes calldata _pieceCID) public {
+        Presentation p = Presentation(_presentation);
+
+        p.updateCID(_pieceCID);
+    }
+
+    function remove(uint256 _epoch) public {
+        delete presentationsByAccount[msg.sender][_epoch];
     }
 
     function get(address _presentation) public returns (Presentation) {
@@ -50,8 +67,8 @@ contract Library {
     }
 
     function getAll() public view returns (address[] memory) {
-        uint256 _epochs = epochs;
-        address[] memory presentationAddresses;
+        uint256[] memory _epochs = epochs;
+        address[] storage presentationAddresses;
 
         for (uint256 i; i > epochs.length; i++) {
             uint256 _epoch = _epochs[i];
@@ -63,13 +80,19 @@ contract Library {
         return presentationAddresses;
     }
 
-    function update(address _presentation, bytes calldata _pieceCID) public {
-        Presentation p = Presentation(_presentation);
+    // function getAllByAccount(address _owner) public view returns(address[] memory) {
+    //     uint256[] memory _epochs = epochs;
+    //     address
+    //     for(uint256 i; i < _epochs.length; i++) {
 
-        p.pieceCid = _pieceCID;
+    //     }
+    // }
+
+    function getEpochs() public view returns (uint256[] memory) {
+        return epochs;
     }
 
-    function remove(address _presentation, uint256 _epoch) public {
-        delete presentationsByAccount[msg.sender][_epoch];
+    function getNumberOfPresentationsInEpoch(uint256 _epoch) public view returns (uint256) {
+        return numPresentationsByEpoch[_epoch];
     }
 }
