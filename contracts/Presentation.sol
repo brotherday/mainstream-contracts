@@ -5,7 +5,6 @@ import {DataCap} from "./DataCap/DataCap.sol";
 contract Presentation is DataCap {
     bytes public pieceCid;
     address public owner;
-    bytes public topic;
     string public metadata;
     uint256 public ranking;
     uint256 public length;

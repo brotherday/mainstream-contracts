@@ -13,8 +13,8 @@ contract Profile {
     mapping(address => bytes32) public pictures;
     mapping(address => bytes32) public roles;
 
-    constructor(address _owner, bytes32 _role) {
-        owner = _owner;
+    constructor(bytes32 _role) {
+        owner = msg.sender;
         roles[msg.sender] = _role;
     }
 
