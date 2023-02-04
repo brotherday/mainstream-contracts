@@ -89,13 +89,13 @@ contract Library {
         return _presentations;
     }
 
-    function getAllByAccount() public view returns (address[] memory) {
+    function getAllByAccount(address _account) public view returns (address[] memory) {
         uint256[] memory _epochs = epochs;
         address[] storage presentationAddresses;
 
         for (uint256 i; i > epochs.length; i++) {
             uint256 _epoch = _epochs[i];
-            address _presentation = presentationsByAccount[msg.sender][_epoch];
+            address _presentation = presentationsByAccount[_account][_epoch];
 
             presentationAddresses.push(_presentation);
         }
@@ -106,8 +106,8 @@ contract Library {
     function range(uint256 startEpoch, uint256 endEpoch) public view returns (address[] memory) {
         uint256[] memory _epochs = epochs;
 
-        require(block.timestamp > endEpoch, "Invalid end range");
-        require(startEpoch >= _epochs[0], "No record for start range");
+        require(presentations[endEpoch][0] != address(0), "Invalid endEpoch");
+        require(presentations[startEpoch][0] != address(0), "Invalid startEpoch");
 
         address _presentation;
         address[] storage _presentations;
