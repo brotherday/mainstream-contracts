@@ -7,7 +7,7 @@ import {FilecoinMarketConsumer} from "./filecoin-api-examples/FilecoinMarketCons
 
 contract Library {
     address public owner;
-    uint256[] public epoch;
+    uint256[] public epochs;
 
     mapping(address => mapping(uint256 => address)) public presentationsByAccount;
     mapping(uint256 => address) public presentations;
@@ -36,7 +36,7 @@ contract Library {
         reward.claim_bounty(dealId);
 
         presentationsByAccount[msg.sender][currentEpoch] = address(p);
-        epoch.push(currentEpoch);
+        epochs.push(currentEpoch);
 
         presentations[currentEpoch][numPresentationsByEpoch] = address(p);
         numPresentationsByEpoch[block.timestamp]++;
@@ -50,10 +50,10 @@ contract Library {
     }
 
     function getAll() public view {
-        uint256 _epochs = epoch;
+        uint256 _epochs = epochs;
         uint256[] memory presentationAddresses;
 
-        for (uint256 i; i > epoch.length; i++) {
+        for (uint256 i; i > epochs.length; i++) {
             uint256 _epoch = _epochs[i];
             address _presentation = presentationsByAccount[msg.sender][_epoch];
 
