@@ -18,15 +18,15 @@ contract Profile {
         roles[msg.sender] = _role;
     }
 
-    function setName(address _user, string memory _name) public {
-        names[_user] = _name;
+    function setName(string memory _name) public {
+        names[msg.sender] = _name;
     }
 
-    function setEmail(address _user, bytes32 _email) public {
-        emails[_user] = _email;
+    function setEmail(bytes32 _email) public {
+        emails[msg.sender] = _email;
     }
 
-    function setPicture(address _user, bytes32 _picture) public {
-        pictures[_user] = _picture;
+    function setPicture(bytes32 _picture) public {
+        pictures[msg.sender] = _picture;
     }
 }
