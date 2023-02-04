@@ -9,6 +9,9 @@ contract Presentation is DataCap {
     uint256 public ranking;
     uint256 public length;
 
+    uint256 constant VOTE_MIN = 1;
+    uint256 constant VOTE_MAX = 10;
+
     mapping(address => uint16) public votes;
 
     constructor(
@@ -32,8 +35,8 @@ contract Presentation is DataCap {
             return;
         }
 
-        require(grade >= 1, "grade too low");
-        require(grade <= 10, "grade too high");
+        require(grade >= VOTE_MIN, "grade too low");
+        require(grade <= VOTE_MAX, "grade too high");
 
         if (votes[msg.sender] == 0) {
             ranking = (ranking * length + grade * 100) / (length + 1);
