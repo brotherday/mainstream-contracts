@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+// SPDX-License-Identifier: APGL-3.0
 pragma solidity ^0.8.0;
 import {DataCap} from "./DataCap/DataCap.sol";
 
