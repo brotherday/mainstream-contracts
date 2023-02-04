@@ -6,6 +6,16 @@ import "@zondax/filecoin-solidity/contracts/v0.8/DataCapAPI.sol";
 import "@openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
 
 contract DataCap is IDataCap, ERC165 {
+    struct MintParams {
+        /// A non-negative amount to burn
+        BigInt amount;
+    }
+
+    struct MintReturn {
+        /// New balance in the account after the successful burn
+        BigInt balance;
+    }
+
     function name() external returns (string memory) {
         return DataCapAPI.name();
     }
@@ -20,6 +30,24 @@ contract DataCap is IDataCap, ERC165 {
 
     function balance(bytes calldata addr) external returns (BigInt memory) {
         DataCapAPI.balance(addr);
+    }
+
+    // TODO: Fix mint
+    function mint(MintParams memory params) internal returns (MintReturn memory) {
+        bytes memory raw_request = params.serializeMintParams();
+
+        bytes memory raw_response = Actor.call(
+            DataCapTypes.MintMethodNum,
+            DataCapTypes.ActorID,
+            raw_request,
+            Misc.CBOR_CODEC,
+            msg.value,
+            false
+        );
+
+        bytes memory result = Actor.readRespData(raw_response);
+
+        return result.deserializeMintReturn();
     }
 
     function allowance(DataCapTypes.GetAllowanceParams calldata params)
