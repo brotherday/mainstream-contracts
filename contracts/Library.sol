@@ -57,8 +57,9 @@ contract Library {
         p.updateCID(_pieceCID);
     }
 
-    function remove(uint256 _epoch) public {
+    function remove(uint256 _epoch, uint256 _num) public {
         delete presentationsByAccount[msg.sender][_epoch];
+        delete presentations[_epoch][_num];
     }
 
     function get(address _presentation) public returns (Presentation) {
@@ -78,6 +79,23 @@ contract Library {
         }
 
         return presentationAddresses;
+    }
+
+    function range(uint256 startEpoch, uint256 endEpoch) public view returns (address[] memory) {
+        uint256[] memory _epochs = epochs;
+
+        require(block.timestamp > endEpoch, "Invalid end range");
+        require(startEpoch >= _epochs[0], "No record for start range");
+
+        address _presentation;
+        address[] storage _presentations;
+
+        for (uint256 currentEpoch = startEpoch; currentEpoch <= endEpoch; currentEpoch++) {
+            _presentation = presentations[currentEpoch][numPresentationsByEpoch[currentEpoch]];
+            _presentations.push(_presentation);
+        }
+
+        return _presentations;
     }
 
     // function getAllByAccount(address _owner) public view returns(address[] memory) {
