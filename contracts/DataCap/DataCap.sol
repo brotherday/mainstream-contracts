@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 import "../interface/IDataCap.sol";
 import "@zondax/filecoin-solidity/contracts/v0.8/DataCapAPI.sol";
-import "@openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
 
-contract DataCap is IDataCap, ERC165 {
+abstract contract DataCap is IDataCap, IERC165 {
     function name() external returns (string memory) {
         return DataCapAPI.name();
     }
@@ -63,7 +63,7 @@ contract DataCap is IDataCap, ERC165 {
         return DataCapAPI.burnFrom(params);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
-        return interfaceId == type(IDataCap).interfaceId || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
+        return interfaceId == type(IDataCap).interfaceId;
     }
 }
