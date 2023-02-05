@@ -15,17 +15,14 @@ contract DataCap is IDataCap, ERC165 {
     }
 
     function totalSupply() external returns (BigInt memory) {
-        DataCapAPI.totalSupply();
+        return DataCapAPI.totalSupply();
     }
 
     function balance(bytes calldata addr) external returns (BigInt memory) {
-        DataCapAPI.balance(addr);
+        return DataCapAPI.balance(addr);
     }
 
-    function allowance(DataCapTypes.GetAllowanceParams calldata params)
-        external
-        returns (BigInt memory)
-    {
+    function allowance(DataCapTypes.GetAllowanceParams calldata params) external returns (BigInt memory) {
         return DataCapAPI.allowance(params);
     }
 
@@ -43,31 +40,19 @@ contract DataCap is IDataCap, ERC165 {
         return DataCapAPI.transferFrom(params);
     }
 
-    function increaseAllowance(DataCapTypes.IncreaseAllowanceParams calldata params)
-        external
-        returns (BigInt memory)
-    {
+    function increaseAllowance(DataCapTypes.IncreaseAllowanceParams calldata params) external returns (BigInt memory) {
         return DataCapAPI.increaseAllowance(params);
     }
 
-    function decreaseAllowance(DataCapTypes.DecreaseAllowanceParams calldata params)
-        external
-        returns (BigInt memory)
-    {
+    function decreaseAllowance(DataCapTypes.DecreaseAllowanceParams calldata params) external returns (BigInt memory) {
         return DataCapAPI.decreaseAllowance(params);
     }
 
-    function revokeAllowance(DataCapTypes.RevokeAllowanceParams calldata params)
-        external
-        returns (BigInt memory)
-    {
+    function revokeAllowance(DataCapTypes.RevokeAllowanceParams calldata params) external returns (BigInt memory) {
         return DataCapAPI.revokeAllowance(params);
     }
 
-    function burn(DataCapTypes.BurnParams calldata params)
-        external
-        returns (DataCapTypes.BurnReturn memory)
-    {
+    function burn(DataCapTypes.BurnParams calldata params) external returns (DataCapTypes.BurnReturn memory) {
         return DataCapAPI.burn(params);
     }
 
