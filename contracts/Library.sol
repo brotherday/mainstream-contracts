@@ -6,24 +6,27 @@ import {DealRewarder} from "./filecoin-api-examples/DealRewarder.sol";
 import {FilecoinMarketConsumer} from "./filecoin-api-examples/FilecoinMarketConsumer.sol";
 
 contract Library {
-    address public owner;
-    uint256[] public epochs;
+    address private owner;
+    uint256[] private epochs;
+    uint256 private count;
+    uint64 private provider;
+
+    event unsynchronizedCount();
 
     mapping(address => mapping(uint256 => address)) public presentationsByAccount;
     mapping(uint256 => mapping(uint256 => address)) public presentations;
     mapping(uint256 => uint256) public numPresentationsByEpoch;
     mapping(address => address[]) public contributors;
 
-    constructor(address _owner) {
+    constructor(address _owner, uint64 _provider) {
         owner = _owner;
+        provider = _provider;
     }
 
-    function add(
-        bytes calldata _pieceCid,
-        uint64 dealId,
-        uint64 size,
-        string memory metadata
-    ) public returns (address) {
+    function add(bytes calldata _pieceCid, uint64 dealId, uint64 size, string memory metadata)
+        public
+        returns (address)
+    {
         Presentation p = new Presentation();
         p.initialize(metadata, 0);
 
@@ -36,6 +39,7 @@ contract Library {
 
         presentations[currentEpoch][numPresentationsByEpoch[currentEpoch]] = address(p);
         numPresentationsByEpoch[currentEpoch]++;
+        count++;
 
         return address(p);
     }
@@ -46,12 +50,7 @@ contract Library {
         }
     }
 
-    function update(
-        address _presentation,
-        bytes calldata _pieceCID,
-        uint64 dealId,
-        uint64 size
-    ) public {
+    function update(address _presentation, bytes calldata _pieceCID, uint64 dealId, uint64 size) public {
         Presentation p = Presentation(_presentation);
 
         FilecoinMarketConsumer consumer = new FilecoinMarketConsumer();
@@ -60,6 +59,7 @@ contract Library {
 
         consumer.storeAll(dealId);
         reward.addCID(_pieceCID, size);
+        reward.authorizeData(_pieceCID, provider, size);
 
         reward.claim_bounty(dealId);
 
@@ -71,52 +71,72 @@ contract Library {
         delete presentations[_epoch][_num];
     }
 
-    function get(address _presentation) public view returns (Presentation) {
-        Presentation p = Presentation(_presentation);
-        return p;
+    function get(uint256 _epoch, uint256 _num) public view returns (address) {
+        require(_epoch >= epochs[0], "epoch is lower than first epoch");
+        require(_epoch <= epochs[epochs.length - 1], "epoch is higher than last epoch");
+        require(presentations[_epoch][0] != address(0), "epoch does not contain any presentation");
+        require(_num <= numPresentationsByEpoch[_epoch], "non existing presentation");
+        return presentations[_epoch][_num];
     }
 
-    function getAll() public view returns (address[] memory) {
+    function getAll() public returns (address[] memory) {
         uint256[] memory _epochs = epochs;
 
-        address _presentation;
-        address[] storage _presentations;
+        address[] memory _presentations = new address[](count);
 
+        uint256 k;
         for (uint256 i; i <= _epochs.length; i++) {
             uint256 _epoch = _epochs[i];
-            _presentation = presentations[_epoch][numPresentationsByEpoch[_epoch]];
-            _presentations.push(_presentation);
+
+            for (uint256 j; j < numPresentationsByEpoch[_epoch]; j++) {
+                _presentations[k] = presentations[_epoch][j];
+                k++;
+                if (k >= count) {
+                    emit unsynchronizedCount();
+                    break;
+                }
+            }
         }
 
         return _presentations;
     }
 
-    function getAllByAccount(address _account) public view returns (address[] memory) {
+    function getAllByAccount(address _account) public returns (address[] memory) {
         uint256[] memory _epochs = epochs;
-        address[] storage presentationAddresses;
+        address[] memory presentationAddresses = new address[](count);
 
+        uint256 k;
         for (uint256 i; i > epochs.length; i++) {
             uint256 _epoch = _epochs[i];
             address _presentation = presentationsByAccount[_account][_epoch];
-
-            presentationAddresses.push(_presentation);
+            presentationAddresses[k] = _presentation;
+            k++;
+            if (k >= count) {
+                emit unsynchronizedCount();
+                break;
+            }
         }
 
         return presentationAddresses;
     }
 
-    function range(uint256 startEpoch, uint256 endEpoch) public view returns (address[] memory) {
-        uint256[] memory _epochs = epochs;
-
+    function range(uint256 startEpoch, uint256 endEpoch) public returns (address[] memory) {
         require(presentations[endEpoch][0] != address(0), "Invalid endEpoch");
         require(presentations[startEpoch][0] != address(0), "Invalid startEpoch");
 
-        address _presentation;
-        address[] storage _presentations;
+        address[] memory _presentations = new address[](count);
 
+        uint256 k;
         for (uint256 currentEpoch = startEpoch; currentEpoch <= endEpoch; currentEpoch++) {
-            _presentation = presentations[currentEpoch][numPresentationsByEpoch[currentEpoch]];
-            _presentations.push(_presentation);
+            if (k >= count) {
+                emit unsynchronizedCount();
+                break;
+            }
+            if (numPresentationsByEpoch[currentEpoch] != 0) {
+                address _presentation = presentations[currentEpoch][numPresentationsByEpoch[currentEpoch]];
+                _presentations[k] = _presentation;
+                k++;
+            }
         }
 
         return _presentations;
@@ -128,5 +148,13 @@ contract Library {
 
     function getNumberOfPresentationsInEpoch(uint256 _epoch) public view returns (uint256) {
         return numPresentationsByEpoch[_epoch];
+    }
+
+    function Owner() public view returns (address) {
+        return owner;
+    }
+
+    function Count() public view returns (uint256) {
+        return count;
     }
 }

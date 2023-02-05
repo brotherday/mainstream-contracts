@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: APGL-3.0
 pragma solidity ^0.8.0;
+
 import {File} from "./File/File.sol";
 
 contract Presentation is File {
@@ -11,7 +12,7 @@ contract Presentation is File {
     uint256 public constant VOTE_MIN = 1;
     uint256 public constant VOTE_MAX = 10;
 
-    mapping(address => uint16) public votes;
+    mapping(address => uint8) public votes;
 
     function initialize(string memory _metadata, uint256 _ranking) public initializer {
         metadata = _metadata;
@@ -19,28 +20,29 @@ contract Presentation is File {
     }
 
     function updateCID(bytes calldata _pieceCID) external {
+        require(owner() == msg.sender);
         pieceCid = _pieceCID;
     }
 
-    function updateRanking(uint16 grade) public {
-        if (votes[msg.sender] == grade) {
-            return;
-        }
-
+    function updateRanking(uint8 grade) public {
+        require(owner() == msg.sender);
+        require(votes[msg.sender] != grade);
         require(grade >= VOTE_MIN, "grade too low");
         require(grade <= VOTE_MAX, "grade too high");
 
+        uint256 _length = length;
+
         if (votes[msg.sender] == 0) {
-            ranking = (ranking * length + grade * 100) / (length + 1);
             length++;
         } else {
             ranking -= votes[msg.sender] * 100;
-            ranking = (ranking * length + grade * 100) / length;
         }
+
+        ranking = (ranking * _length + grade * 100) / length;
         votes[msg.sender] = grade;
     }
 
-    function getVote(address _voter) public view returns (uint16) {
+    function getVote(address _voter) public view returns (uint8) {
         return votes[_voter];
     }
 
