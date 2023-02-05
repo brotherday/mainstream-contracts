@@ -1,4 +1,8 @@
-solidity-cborutils/=lib/solidity-cborutils/
 @ensdomains/=lib/
-@zondax/=lib/
 @openzeppelin-contracts/=lib/openzeppelin-contracts/
+@zondax/=lib/
+buffer/=lib/buffer/contracts/
+ds-test/=lib/openzeppelin-contracts/lib/forge-std/lib/ds-test/src/
+filecoin-solidity/=lib/filecoin-solidity/contracts/
+forge-std/=lib/forge-std/src/
+solidity-cborutils/=lib/solidity-cborutils/
