@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 contract Profile {
-    address public owner;
+    address private owner;
 
     bytes32 public constant Host = keccak256("Host");
     bytes32 public constant Public = keccak256("Public");
@@ -17,6 +17,10 @@ contract Profile {
         require(_role == Host || _role == Public || _role == Speaker, "Invalid role type");
         owner = msg.sender;
         roles[msg.sender] = _role;
+    }
+
+    function Owner() public view returns (address) {
+        return owner;
     }
 
     function setName(string memory _name) public {

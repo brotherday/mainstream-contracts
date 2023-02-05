@@ -12,9 +12,7 @@ interface IDataCap {
 
     function balance(bytes memory addr) external returns (BigInt memory);
 
-    function allowance(DataCapTypes.GetAllowanceParams memory params)
-        external
-        returns (BigInt memory);
+    function allowance(DataCapTypes.GetAllowanceParams memory params) external returns (BigInt memory);
 
     function transfer(DataCapTypes.TransferParams memory params)
         external
@@ -24,21 +22,13 @@ interface IDataCap {
         external
         returns (DataCapTypes.TransferFromReturn memory);
 
-    function increaseAllowance(DataCapTypes.IncreaseAllowanceParams memory params)
-        external
-        returns (BigInt memory);
+    function increaseAllowance(DataCapTypes.IncreaseAllowanceParams memory params) external returns (BigInt memory);
 
-    function decreaseAllowance(DataCapTypes.DecreaseAllowanceParams memory params)
-        external
-        returns (BigInt memory);
+    function decreaseAllowance(DataCapTypes.DecreaseAllowanceParams memory params) external returns (BigInt memory);
 
-    function revokeAllowance(DataCapTypes.RevokeAllowanceParams memory params)
-        external
-        returns (BigInt memory);
+    function revokeAllowance(DataCapTypes.RevokeAllowanceParams memory params) external returns (BigInt memory);
 
-    function burn(DataCapTypes.BurnParams memory params)
-        external
-        returns (DataCapTypes.BurnReturn memory);
+    function burn(DataCapTypes.BurnParams memory params) external returns (DataCapTypes.BurnReturn memory);
 
     function burnFrom(DataCapTypes.BurnFromParams memory params)
         external
