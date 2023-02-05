@@ -66,12 +66,6 @@ contract DealRewarder {
         send(clientRet.client);
     }
 
-    function call_actor_id(uint64 method, uint256 value, uint64 flags, uint64 codec, bytes memory params, uint64 id) public returns (bool, int256, uint64, bytes memory) {
-        (bool success, bytes memory data) = address(CALL_ACTOR_ID).delegatecall(abi.encode(method, value, flags, codec, params, id));
-        (int256 exit, uint64 return_codec, bytes memory return_value) = abi.decode(data, (int256, uint64, bytes));
-        return (success, exit, return_codec, return_value);
-    }
-
     // send 1 FIL to the filecoin actor at actor_id
     function send(uint64 actorID) internal {
         bytes memory emptyParams = "";
