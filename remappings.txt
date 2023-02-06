@@ -1,5 +1,6 @@
 @ensdomains/=lib/
 @openzeppelin-contracts/=lib/openzeppelin-contracts/
+@openzeppelin/=lib/openzeppelin-contracts/
 @zondax/=lib/
 buffer/=lib/buffer/contracts/
 ds-test/=lib/openzeppelin-contracts/lib/forge-std/lib/ds-test/src/

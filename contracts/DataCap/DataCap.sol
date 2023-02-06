@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "../interface/IDataCap.sol";
 import "@zondax/filecoin-solidity/contracts/v0.8/DataCapAPI.sol";
-import "@openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
+import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
 abstract contract DataCap is IDataCap, IERC165 {
     function name() external returns (string memory) {
