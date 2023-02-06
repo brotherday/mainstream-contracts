@@ -29,7 +29,7 @@
     {
       "label": "forge:remappings",
       "type": "shell",
-      "command": "forge remappings",
+      "command": "forge",
       "args": ["remappings"],
       "problemMatcher": []
     },
