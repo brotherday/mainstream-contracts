@@ -11,7 +11,10 @@ contract Library {
     uint256 private count;
     uint64 private provider;
 
-    event unsynchronizedCount();
+    /// @notice Inform us that the presentation count is wrong
+    /// @dev You must listen to this event and set count to updatedCount
+    /// @param updatedCount updatedCount >= count
+    event UnsynchronizedCount(uint256 updatedCount);
 
     mapping(address => mapping(uint256 => address)) public presentationsByAccount;
     mapping(uint256 => mapping(uint256 => address)) public presentations;
@@ -69,6 +72,7 @@ contract Library {
     function remove(uint256 _epoch, uint256 _num) public {
         delete presentationsByAccount[msg.sender][_epoch];
         delete presentations[_epoch][_num];
+        count--;
     }
 
     function get(uint256 _epoch, uint256 _num) public view returns (address) {
@@ -89,13 +93,15 @@ contract Library {
             uint256 _epoch = _epochs[i];
 
             for (uint256 j; j < numPresentationsByEpoch[_epoch]; j++) {
-                _presentations[k] = presentations[_epoch][j];
-                k++;
-                if (k >= count) {
-                    emit unsynchronizedCount();
-                    break;
+                if (k < count) {
+                    _presentations[k] = presentations[_epoch][j];
                 }
+                k++;
             }
+        }
+
+        if (count < k) {
+            emit UnsynchronizedCount(k);
         }
 
         return _presentations;
@@ -107,14 +113,16 @@ contract Library {
 
         uint256 k;
         for (uint256 i; i > epochs.length; i++) {
-            uint256 _epoch = _epochs[i];
-            address _presentation = presentationsByAccount[_account][_epoch];
-            presentationAddresses[k] = _presentation;
-            k++;
-            if (k >= count) {
-                emit unsynchronizedCount();
-                break;
+            if (k < count) {
+                uint256 _epoch = _epochs[i];
+                address _presentation = presentationsByAccount[_account][_epoch];
+                presentationAddresses[k] = _presentation;
             }
+            k++;
+        }
+
+        if (count < k) {
+            emit UnsynchronizedCount(k);
         }
 
         return presentationAddresses;
@@ -128,15 +136,17 @@ contract Library {
 
         uint256 k;
         for (uint256 currentEpoch = startEpoch; currentEpoch <= endEpoch; currentEpoch++) {
-            if (k >= count) {
-                emit unsynchronizedCount();
-                break;
-            }
             if (numPresentationsByEpoch[currentEpoch] != 0) {
-                address _presentation = presentations[currentEpoch][numPresentationsByEpoch[currentEpoch]];
-                _presentations[k] = _presentation;
+                if (k < count) {
+                    address _presentation = presentations[currentEpoch][numPresentationsByEpoch[currentEpoch]];
+                    _presentations[k] = _presentation;
+                }
                 k++;
             }
+        }
+
+        if (count < k) {
+            emit UnsynchronizedCount(k);
         }
 
         return _presentations;
@@ -156,5 +166,10 @@ contract Library {
 
     function Count() public view returns (uint256) {
         return count;
+    }
+
+    function setCount(uint256 _count) public {
+        require(owner == msg.sender, "only Owner can alter count directly");
+        count = _count;
     }
 }
